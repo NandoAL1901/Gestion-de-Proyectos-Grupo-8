@@ -4,11 +4,14 @@ import { Car, Users, MapPin, Phone, ArrowRight, CheckCircle, Edit2, X, Save, Ale
 import { supabase } from '../lib/supabase'
 import { DISTRITOS, CARRERAS, HORARIOS } from '../lib/constants'
 import { esTelefonoValido, normalizarTelefono, esPlacaValida } from '../lib/validation'
+import { reputacionTexto } from '../lib/resenas'
+import Stars from '../components/Stars'
 import s from './Dashboard.module.css'
 
 export default function Dashboard({ usuario, onUpdate, onLogout }) {
   const navigate = useNavigate()
   const [stats, setStats] = useState({ total: 0, conductores: 0, pasajeros: 0, matches: 0 })
+  const [reputacion, setReputacion] = useState(null)
   const [editOpen, setEditOpen] = useState(false)
   const [editForm, setEditForm] = useState({})
   const [editLoading, setEditLoading] = useState(false)
@@ -26,6 +29,10 @@ export default function Dashboard({ usuario, onUpdate, onLogout }) {
         setStats({ total: data.length, conductores, pasajeros, matches })
       })
       .catch(() => setStats({ total: '–', conductores: '–', pasajeros: '–', matches: '–' }))
+
+    supabase.from('reputacion_usuarios').select('promedio, total').eq('usuario_id', usuario.id).maybeSingle()
+      .then(({ data }) => setReputacion(data))
+      .catch(() => {})
   }, [usuario])
 
   const openEdit = () => {
@@ -174,6 +181,10 @@ export default function Dashboard({ usuario, onUpdate, onLogout }) {
               <div className={s.cardTitle}><Car size={15} color="var(--accent)" /> Tipo de usuario</div>
               <div className={`${s.badge} ${s.badgeLarge} ${esConductor ? s.badgeConductor : s.badgePasajero}`}>
                 {esConductor ? '🚗' : '🎒'} {usuario.tipo_usuario}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: esConductor ? 12 : 0 }}>
+                <Stars value={reputacion?.promedio || 0} size={14} />
+                <span style={{ fontSize: 12, color: 'var(--medium)' }}>{reputacionTexto(reputacion)}</span>
               </div>
               {esConductor && (
                 <div>

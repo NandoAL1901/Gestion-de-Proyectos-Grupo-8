@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase'
 import { HORARIOS } from '../lib/constants'
 import { whatsappUrl } from '../lib/validation'
 import { distritosCercanos, ordenarPorCompatibilidad } from '../lib/matching'
+import { mapaReputacion } from '../lib/resenas'
+import Stars from '../components/Stars'
 import s from './Matches.module.css'
 
 const AVATARS_BG = ['#E8F5EF', '#EFF6FF', '#FEF3C7', '#FCE7F3', '#F0FDF4', '#EEF2FF']
@@ -12,6 +14,7 @@ const PAGE_SIZE = 12
 
 export default function Matches({ usuario }) {
   const [usuarios, setUsuarios] = useState([])
+  const [reputacion, setReputacion] = useState({})
   const [loading, setLoading] = useState(true)
   const [filtroTipo, setFiltroTipo] = useState('todos')
   const [filtroHorario, setFiltroHorario] = useState('')
@@ -21,14 +24,18 @@ export default function Matches({ usuario }) {
     let cancelado = false
     const cargar = async () => {
       setLoading(true)
-      const { data, error } = await supabase
-        .from('usuarios_directorio')
-        .select('id, nombre_completo, carrera, distrito, tipo_usuario, horario_entrada, horario_salida, telefono, modelo_auto, asientos_disponibles, bio, mostrar_telefono, created_at')
-        .in('distrito', distritosCercanos(usuario.distrito))
-        .neq('id', usuario.id)
-        .order('created_at', { ascending: false })
+      const [dir, rep] = await Promise.all([
+        supabase
+          .from('usuarios_directorio')
+          .select('id, nombre_completo, carrera, distrito, tipo_usuario, horario_entrada, horario_salida, telefono, modelo_auto, asientos_disponibles, bio, mostrar_telefono, created_at')
+          .in('distrito', distritosCercanos(usuario.distrito))
+          .neq('id', usuario.id)
+          .order('created_at', { ascending: false }),
+        supabase.from('reputacion_usuarios').select('*'),
+      ])
       if (cancelado) return
-      setUsuarios(!error && data ? data : [])
+      setUsuarios(!dir.error && dir.data ? dir.data : [])
+      setReputacion(mapaReputacion(rep.data))
       setLoading(false)
     }
     cargar()
@@ -119,6 +126,12 @@ export default function Matches({ usuario }) {
                     <div className={s.cardMeta}>
                       <div className={s.cardName}>{u.nombre_completo}</div>
                       <div className={s.cardCarrera}>{u.carrera}</div>
+                      {reputacion[u.id]?.total > 0 && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 3 }}>
+                          <Stars value={reputacion[u.id].promedio} size={11} />
+                          <span style={{ fontSize: 10, color: 'var(--medium)' }}>{reputacion[u.id].promedio} ({reputacion[u.id].total})</span>
+                        </div>
+                      )}
                       <div className={s.tagRow}>
                         {u._compat.razones.map(r => (
                           <span key={r} className={s.razon}>{r}</span>
