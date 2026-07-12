@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Car, LayoutDashboard, Users, LogOut, Route } from 'lucide-react'
+import { Car, LayoutDashboard, Users, LogOut, Route, Map } from 'lucide-react'
 import s from './Navbar.module.css'
 
 export default function Navbar({ usuario, onLogout }) {
@@ -10,6 +10,7 @@ export default function Navbar({ usuario, onLogout }) {
     { path: '/dashboard', label: 'Inicio', icon: <LayoutDashboard size={15} /> },
     { path: '/matches', label: 'Matches', icon: <Users size={15} /> },
     { path: '/viajes', label: 'Viajes', icon: <Route size={15} /> },
+    { path: '/mapa', label: 'Mapa', icon: <Map size={15} /> },
   ]
 
   return (

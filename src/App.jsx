@@ -7,6 +7,7 @@ import Registro from './pages/Registro'
 import Dashboard from './pages/Dashboard'
 import Matches from './pages/Matches'
 import Viajes from './pages/Viajes'
+import Mapa from './pages/Mapa'
 import Navbar from './components/Navbar'
 import { supabase } from './lib/supabase'
 
@@ -59,6 +60,7 @@ function App() {
         <Route path="/dashboard" element={usuario ? <Dashboard usuario={usuario} onUpdate={updateUsuario} onLogout={logout} /> : <Navigate to="/" />} />
         <Route path="/matches" element={usuario ? <Matches usuario={usuario} /> : <Navigate to="/" />} />
         <Route path="/viajes" element={usuario ? <Viajes usuario={usuario} /> : <Navigate to="/" />} />
+        <Route path="/mapa" element={usuario ? <Mapa usuario={usuario} /> : <Navigate to="/" />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
