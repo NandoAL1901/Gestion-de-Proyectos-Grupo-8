@@ -178,6 +178,12 @@ export default function Login({ onLogin }) {
           <button className={s.submitBtn} onClick={handleLogin} disabled={loading}>
             {loading ? 'Verificando...' : <><LogIn size={16} /> Ingresar</>}
           </button>
+
+          <div style={{ textAlign: 'center', marginTop: '14px' }}>
+            <button className={s.linkBtn} onClick={() => navigate('/recuperar')}>
+              ¿Olvidaste tu contraseña?
+            </button>
+          </div>
         </div>
 
         <div className={s.footerText}>

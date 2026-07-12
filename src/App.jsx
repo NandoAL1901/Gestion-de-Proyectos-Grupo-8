@@ -8,14 +8,21 @@ import Dashboard from './pages/Dashboard'
 import Matches from './pages/Matches'
 import Viajes from './pages/Viajes'
 import Mapa from './pages/Mapa'
+import RecuperarPassword from './pages/RecuperarPassword'
+import ResetPassword from './pages/ResetPassword'
 import Navbar from './components/Navbar'
 import { supabase } from './lib/supabase'
 
 function App() {
   const [usuario, setUsuario] = useState(null)
-  const [loading, setLoading] = useState(true)
+  // En /reset-password arrancamos sin "cargando" y no cargamos perfil: la sesión
+  // de recuperación no debe mandar al usuario al dashboard antes de cambiar la clave.
+  const enResetPassword = window.location.pathname === '/reset-password'
+  const [loading, setLoading] = useState(!enResetPassword)
 
   useEffect(() => {
+    if (window.location.pathname === '/reset-password') return
+
     // Obtener sesión activa al cargar
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
@@ -57,6 +64,8 @@ function App() {
         <Route path="/" element={!usuario ? <Landing /> : <Navigate to="/dashboard" />} />
         <Route path="/login" element={!usuario ? <Login onLogin={login} /> : <Navigate to="/dashboard" />} />
         <Route path="/registro" element={!usuario ? <Registro onLogin={login} /> : <Navigate to="/dashboard" />} />
+        <Route path="/recuperar" element={!usuario ? <RecuperarPassword /> : <Navigate to="/dashboard" />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/dashboard" element={usuario ? <Dashboard usuario={usuario} onUpdate={updateUsuario} onLogout={logout} /> : <Navigate to="/" />} />
         <Route path="/matches" element={usuario ? <Matches usuario={usuario} /> : <Navigate to="/" />} />
         <Route path="/viajes" element={usuario ? <Viajes usuario={usuario} /> : <Navigate to="/" />} />
