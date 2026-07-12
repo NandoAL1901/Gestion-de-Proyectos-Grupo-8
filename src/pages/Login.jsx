@@ -1,29 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Car, LogIn, AlertCircle, ArrowLeft, Eye, EyeOff, UserX } from 'lucide-react'
 import { supabase } from '../lib/supabase'
-
-const styles = {
-  page: { minHeight: '100vh', background: 'var(--cream)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '40px 16px' },
-  container: { width: '100%', maxWidth: '420px' },
-  backBtn: { display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--medium)', background: 'none', border: 'none', fontSize: '14px', cursor: 'pointer', padding: '0', marginBottom: '24px' },
-  header: { marginBottom: '32px' },
-  logo: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' },
-  logoBox: { width: '36px', height: '36px', background: 'var(--accent)', borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-  logoText: { fontFamily: 'DM Serif Display, serif', fontSize: '20px' },
-  title: { fontSize: '28px', marginBottom: '6px' },
-  subtitle: { color: 'var(--medium)', fontSize: '14px', fontWeight: '300' },
-  card: { background: 'white', borderRadius: '16px', padding: '28px', border: '1px solid var(--border)', boxShadow: 'var(--card-shadow)', marginBottom: '16px' },
-  field: { marginBottom: '16px' },
-  label: { display: 'block', fontSize: '13px', fontWeight: '500', color: 'var(--charcoal)', marginBottom: '6px' },
-  input: { width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-sm)', border: '1.5px solid var(--border)', fontSize: '14px', color: 'var(--charcoal)', background: 'white', outline: 'none', boxSizing: 'border-box', transition: 'border-color var(--transition)' },
-  alertError: { padding: '12px 16px', borderRadius: 'var(--radius-sm)', fontSize: '13px', marginBottom: '16px', display: 'flex', alignItems: 'flex-start', gap: '8px', background: '#FEF2F2', color: '#B84040', border: '1px solid #FECACA' },
-  alertWarning: { padding: '12px 16px', borderRadius: 'var(--radius-sm)', fontSize: '13px', marginBottom: '16px', display: 'flex', alignItems: 'flex-start', gap: '8px', background: '#FFFBEB', color: '#92400E', border: '1px solid #FDE68A' },
-  submitBtn: { width: '100%', padding: '14px', background: 'var(--charcoal)', color: 'white', border: 'none', borderRadius: 'var(--radius)', fontSize: '15px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '20px', transition: 'opacity var(--transition)' },
-  registerBtn: { width: '100%', padding: '12px', background: 'var(--accent)', color: 'white', border: 'none', borderRadius: 'var(--radius)', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '10px' },
-  linkBtn: { color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: '600', padding: 0 },
-  eyeBtn: { position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--medium)', display: 'flex', padding: 0 },
-}
+import { esCorreoUlima } from '../lib/validation'
+import s from './Login.module.css'
 
 // Tipos de error para mostrar mensajes distintos
 const ERRORS = {
@@ -53,7 +33,7 @@ export default function Login({ onLogin }) {
 
     // Validaciones locales
     if (!email) { setError(ERRORS.NO_EMAIL); return }
-    if (!email.endsWith('@aloe.ulima.edu.pe')) { setError(ERRORS.INVALID_EMAIL); return }
+    if (!esCorreoUlima(email)) { setError(ERRORS.INVALID_EMAIL); return }
     if (!password) { setError(ERRORS.NO_PASSWORD); return }
 
     setLoading(true)
@@ -109,17 +89,14 @@ export default function Login({ onLogin }) {
     // Correo no registrado → aviso especial con botón de registro
     if (errorType === ERRORS.NOT_FOUND) {
       return (
-        <div style={styles.alertWarning}>
+        <div className={s.alertWarning}>
           <UserX size={15} style={{ marginTop: '1px', flexShrink: 0 }} />
           <div>
-            <div style={{ fontWeight: '600', marginBottom: '4px' }}>No encontramos esta cuenta</div>
-            <div style={{ fontSize: '12px', marginBottom: '10px' }}>
+            <div className={s.warningBox}>No encontramos esta cuenta</div>
+            <div className={s.warningText}>
               El correo <strong>{correo}</strong> no está registrado en Carpool Ulima.
             </div>
-            <button
-              onClick={() => navigate('/registro')}
-              style={{ background: '#92400E', color: 'white', border: 'none', borderRadius: '6px', padding: '7px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
-            >
+            <button onClick={() => navigate('/registro')} className={s.warningBtn}>
               Crear cuenta ahora
             </button>
           </div>
@@ -139,85 +116,73 @@ export default function Login({ onLogin }) {
     }
 
     return (
-      <div style={styles.alertError}>
+      <div className={s.alertError}>
         <AlertCircle size={15} style={{ marginTop: '1px', flexShrink: 0 }} />
         {messages[errorType] || 'Ocurrió un error inesperado.'}
       </div>
     )
   }
 
+  const emailError = errorType === ERRORS.NO_EMAIL || errorType === ERRORS.INVALID_EMAIL
+  const passwordError = errorType === ERRORS.WRONG_PASSWORD || errorType === ERRORS.NO_PASSWORD
+
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <button style={styles.backBtn} onClick={() => navigate('/')}>
+    <div className={s.page}>
+      <div className={s.container}>
+        <button className={s.backBtn} onClick={() => navigate('/')}>
           <ArrowLeft size={15} /> Volver al inicio
         </button>
 
-        <div style={styles.header}>
-          <div style={styles.logo}>
-            <div style={styles.logoBox}><Car size={18} color="white" /></div>
-            <span style={styles.logoText}>Carpool Ulima</span>
+        <div className={s.header}>
+          <div className={s.logo}>
+            <div className={s.logoBox}><Car size={18} color="white" /></div>
+            <span className={s.logoText}>Carpool Ulima</span>
           </div>
-          <h1 style={styles.title}>Iniciar sesión</h1>
-          <p style={styles.subtitle}>Ingresa con tu correo y contraseña</p>
+          <h1 className={s.title}>Iniciar sesión</h1>
+          <p className={s.subtitle}>Ingresa con tu correo y contraseña</p>
         </div>
 
         {renderAlert()}
 
-        <div style={styles.card}>
-          <div style={styles.field}>
-            <label style={styles.label}>Correo institucional</label>
+        <div className={s.card}>
+          <div className={s.field}>
+            <label className={s.label}>Correo institucional</label>
             <input
               type="email"
               value={correo}
               onChange={e => { setCorreo(e.target.value); clearError() }}
               onKeyDown={e => e.key === 'Enter' && handleLogin()}
               placeholder="codigo@aloe.ulima.edu.pe"
-              style={{
-                ...styles.input,
-                borderColor: errorType === ERRORS.NO_EMAIL || errorType === ERRORS.INVALID_EMAIL ? 'var(--error)' : 'var(--border)',
-              }}
-              onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-              onBlur={e => e.target.style.borderColor = 'var(--border)'}
+              className={emailError ? `${s.input} ${s.inputError}` : s.input}
               autoFocus
             />
           </div>
 
-          <div style={styles.field}>
-            <label style={styles.label}>Contraseña</label>
-            <div style={{ position: 'relative' }}>
+          <div className={s.field}>
+            <label className={s.label}>Contraseña</label>
+            <div className={s.passwordWrap}>
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={e => { setPassword(e.target.value); clearError() }}
                 onKeyDown={e => e.key === 'Enter' && handleLogin()}
                 placeholder="Tu contraseña"
-                style={{
-                  ...styles.input,
-                  paddingRight: '44px',
-                  borderColor: errorType === ERRORS.WRONG_PASSWORD || errorType === ERRORS.NO_PASSWORD ? 'var(--error)' : 'var(--border)',
-                }}
-                onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-                onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                className={`${s.input} ${s.inputPassword}${passwordError ? ' ' + s.inputError : ''}`}
               />
-              <button type="button" onClick={() => setShowPassword(p => !p)} style={styles.eyeBtn}>
+              <button type="button" onClick={() => setShowPassword(p => !p)} className={s.eyeBtn}>
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>
 
-          <button
-            style={{ ...styles.submitBtn, opacity: loading ? 0.7 : 1 }}
-            onClick={handleLogin}
-            disabled={loading}
-          >
+          <button className={s.submitBtn} onClick={handleLogin} disabled={loading}>
             {loading ? 'Verificando...' : <><LogIn size={16} /> Ingresar</>}
           </button>
         </div>
 
-        <div style={{ textAlign: 'center', fontSize: '13px', color: 'var(--medium)' }}>
+        <div className={s.footerText}>
           ¿Aún no tienes cuenta?{' '}
-          <button style={styles.linkBtn} onClick={() => navigate('/registro')}>
+          <button className={s.linkBtn} onClick={() => navigate('/registro')}>
             Regístrate aquí
           </button>
         </div>

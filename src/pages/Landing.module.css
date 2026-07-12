@@ -1,0 +1,445 @@
+.page {
+  min-height: 100vh;
+  background: var(--cream);
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  background: white;
+}
+
+.headerInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brandBox {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brandName {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+}
+
+.headerBtns {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.loginBtn {
+  background: transparent;
+  color: var(--charcoal);
+  border: 1.5px solid var(--border);
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.joinBtn {
+  background: var(--charcoal);
+  color: white;
+  border: none;
+  padding: 9px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Hero */
+.heroInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 24px 60px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  align-items: center;
+}
+
+.heroLeft {
+  flex: 1 1 300px;
+}
+
+.heroRight {
+  flex: 1 1 300px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.h1 {
+  font-size: clamp(32px, 5vw, 54px);
+  color: var(--charcoal);
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+
+.h1Accent {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.subtitle {
+  font-size: 17px;
+  color: var(--medium);
+  margin-bottom: 36px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.btnRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--charcoal);
+  color: white;
+  padding: 14px 28px;
+  border-radius: var(--radius);
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btnSecondary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--charcoal);
+  padding: 14px 28px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.heroCard {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+}
+
+.heroCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.heroCardIcon {
+  width: 40px;
+  height: 40px;
+  background: var(--accent-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroCardTitle {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.heroCardSub {
+  font-size: 12px;
+  color: var(--medium);
+}
+
+.heroMatchBadge {
+  margin-left: auto;
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.heroList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.heroRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+}
+
+.heroAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.heroRowTitle {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.heroRowSub {
+  font-size: 11px;
+  color: var(--medium);
+}
+
+.statsRow {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.statBox {
+  flex: 1;
+  background: var(--cream);
+  border-radius: var(--radius);
+  padding: 14px;
+  text-align: center;
+}
+
+.statNum {
+  font-size: 26px;
+  font-family: 'DM Serif Display', serif;
+  color: var(--accent);
+  display: block;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: var(--medium);
+  margin-top: 2px;
+}
+
+/* Sections */
+.sectionWrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.sectionH2 {
+  font-size: clamp(26px, 3vw, 36px);
+  margin-bottom: 10px;
+}
+
+.sectionSub {
+  color: var(--medium);
+  font-weight: 300;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.featureCard {
+  background: white;
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  border: 1px solid var(--border);
+}
+
+.featureIcon {
+  width: 44px;
+  height: 44px;
+  background: var(--accent-light);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.featureTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.featureText {
+  font-size: 14px;
+  color: var(--medium);
+  line-height: 1.6;
+}
+
+/* How it works */
+.howBand {
+  background: white;
+  padding: 80px 0;
+}
+
+.howSection {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.howSteps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0;
+}
+
+.stepItem {
+  text-align: center;
+  padding: 20px;
+}
+
+.stepNum {
+  width: 48px;
+  height: 48px;
+  background: var(--accent);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-family: 'DM Serif Display', serif;
+  margin: 0 auto 16px;
+}
+
+.stepTitle {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.stepText {
+  font-size: 13px;
+  color: var(--medium);
+  line-height: 1.6;
+}
+
+/* CTA */
+.ctaBanner {
+  background: var(--charcoal);
+  padding: 64px 24px;
+}
+
+.ctaInner {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ctaH2 {
+  color: white;
+  font-size: clamp(28px, 4vw, 40px);
+  margin-bottom: 16px;
+}
+
+.ctaP {
+  color: var(--light);
+  font-size: 16px;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+
+.ctaBtnRow {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctaBtn {
+  background: var(--accent);
+  color: white;
+  padding: 16px 36px;
+  border-radius: var(--radius);
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ctaSecondaryBtn {
+  background: transparent;
+  color: white;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  padding: 16px 36px;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer {
+  background: var(--cream);
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  text-align: center;
+  color: var(--medium);
+  font-size: 13px;
+}
