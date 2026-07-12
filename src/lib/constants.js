@@ -8,16 +8,29 @@ export const DISTRITOS = [
   'Surquillo', 'Villa El Salvador', 'Villa María del Triunfo'
 ]
 
+// Carreras oficiales de la Universidad de Lima
 export const CARRERAS = [
-  'Administración de Empresas', 'Arquitectura', 'Ciencias de la Comunicación',
-  'Contabilidad', 'Derecho', 'Economía', 'Educación', 'Ingeniería Civil',
-  'Ingeniería de Sistemas', 'Ingeniería Industrial', 'Medicina', 'Nutrición',
-  'Psicología', 'Relaciones Industriales', 'Traducción e Interpretación'
+  'Administración',
+  'Arquitectura',
+  'Comunicación',
+  'Contabilidad y Finanzas',
+  'Derecho',
+  'Economía',
+  'Ingeniería Ambiental',
+  'Ingeniería Civil',
+  'Ingeniería de Sistemas',
+  'Ingeniería Industrial',
+  'Ingeniería Mecatrónica',
+  'Marketing',
+  'Negocios Internacionales',
+  'Psicología',
 ]
 
+// Horario de clases: 7:00 am a 10:00 pm
 export const HORARIOS = [
   '7:00 am', '8:00 am', '9:00 am', '10:00 am', '11:00 am',
-  '12:00 pm', '1:00 pm', '2:00 pm', '3:00 pm'
+  '12:00 pm', '1:00 pm', '2:00 pm', '3:00 pm', '4:00 pm',
+  '5:00 pm', '6:00 pm', '7:00 pm', '8:00 pm', '9:00 pm', '10:00 pm',
 ]
 
 // Distritos colindantes (aproximado) para el matching por cercanía.

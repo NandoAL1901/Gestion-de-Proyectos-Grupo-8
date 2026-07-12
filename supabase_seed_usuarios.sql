@@ -49,9 +49,9 @@ d AS (
   SELECT
     ARRAY['Ana','Luis','María','José','Carla','Jorge','Lucía','Diego','Sofía','Miguel','Valeria','Andrés','Camila','Fernando','Daniela','Gabriel','Paola','Ricardo','Andrea','Sebastián','Rosa','Carlos','Elena','Manuel','Isabel','Fabrizio','Claudia','Renzo','Patricia','Alonso'] AS pn,
     ARRAY['García','Rodríguez','Martínez','López','Gonzáles','Pérez','Sánchez','Ramírez','Torres','Flores','Rivera','Díaz','Vásquez','Castillo','Rojas','Mendoza','Cruz','Morales','Ortiz','Gutiérrez','Chávez','Ramos','Herrera','Medina','Aguilar','Vargas','Campos','Núñez','Salazar','Paredes'] AS an,
-    ARRAY['Administración de Empresas','Arquitectura','Ciencias de la Comunicación','Contabilidad','Derecho','Economía','Ingeniería Civil','Ingeniería de Sistemas','Ingeniería Industrial','Psicología','Nutrición','Traducción e Interpretación'] AS carr,
-    ARRAY['7:00 am','8:00 am','9:00 am','10:00 am','11:00 am'] AS hent,
-    ARRAY['12:00 pm','1:00 pm','2:00 pm','3:00 pm'] AS hsal,
+    ARRAY['Administración','Arquitectura','Comunicación','Contabilidad y Finanzas','Derecho','Economía','Ingeniería Ambiental','Ingeniería Civil','Ingeniería de Sistemas','Ingeniería Industrial','Ingeniería Mecatrónica','Marketing','Negocios Internacionales','Psicología'] AS carr,
+    ARRAY['7:00 am','8:00 am','9:00 am','10:00 am','11:00 am','12:00 pm','2:00 pm','4:00 pm'] AS hent,
+    ARRAY['1:00 pm','3:00 pm','5:00 pm','7:00 pm','9:00 pm','10:00 pm'] AS hsal,
     ARRAY['Toyota Corolla','Kia Rio','Hyundai Accent','Nissan Sentra','Volkswagen Gol','Chevrolet Sail','Suzuki Swift','Toyota Yaris'] AS autos
 )
 INSERT INTO usuarios (
