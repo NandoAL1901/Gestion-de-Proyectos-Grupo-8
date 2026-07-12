@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Registro from './pages/Registro'
 import Dashboard from './pages/Dashboard'
 import Matches from './pages/Matches'
+import Viajes from './pages/Viajes'
 import Navbar from './components/Navbar'
 import { supabase } from './lib/supabase'
 
@@ -57,6 +58,7 @@ function App() {
         <Route path="/registro" element={!usuario ? <Registro onLogin={login} /> : <Navigate to="/dashboard" />} />
         <Route path="/dashboard" element={usuario ? <Dashboard usuario={usuario} onUpdate={updateUsuario} onLogout={logout} /> : <Navigate to="/" />} />
         <Route path="/matches" element={usuario ? <Matches usuario={usuario} /> : <Navigate to="/" />} />
+        <Route path="/viajes" element={usuario ? <Viajes usuario={usuario} /> : <Navigate to="/" />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
