@@ -3,6 +3,7 @@ import { MapPin, Car, User, Phone, Clock, Search, PhoneOff } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { HORARIOS } from '../lib/constants'
 import { whatsappUrl } from '../lib/validation'
+import { distritosCercanos, ordenarPorCompatibilidad } from '../lib/matching'
 import s from './Matches.module.css'
 
 const AVATARS_BG = ['#E8F5EF', '#EFF6FF', '#FEF3C7', '#FCE7F3', '#F0FDF4', '#EEF2FF']
@@ -23,7 +24,7 @@ export default function Matches({ usuario }) {
       const { data, error } = await supabase
         .from('usuarios_directorio')
         .select('id, nombre_completo, carrera, distrito, tipo_usuario, horario_entrada, horario_salida, telefono, modelo_auto, asientos_disponibles, bio, mostrar_telefono, created_at')
-        .eq('distrito', usuario.distrito)
+        .in('distrito', distritosCercanos(usuario.distrito))
         .neq('id', usuario.id)
         .order('created_at', { ascending: false })
       if (cancelado) return
@@ -38,14 +39,16 @@ export default function Matches({ usuario }) {
   const cambiarFiltroTipo = (v) => { setFiltroTipo(v); setVisibleCount(PAGE_SIZE) }
   const cambiarFiltroHorario = (v) => { setFiltroHorario(v); setVisibleCount(PAGE_SIZE) }
 
-  const filtered = usuarios.filter(u => {
+  const filtrados = usuarios.filter(u => {
     if (filtroTipo !== 'todos' && u.tipo_usuario !== filtroTipo) return false
     if (filtroHorario && u.horario_entrada !== filtroHorario) return false
     return true
   })
 
-  const visible = filtered.slice(0, visibleCount)
-  const hasMore = filtered.length > visibleCount
+  // Orden inteligente: mejores matches primero (rol, cercanía, horario)
+  const ordenados = ordenarPorCompatibilidad(usuario, filtrados)
+  const visible = ordenados.slice(0, visibleCount)
+  const hasMore = ordenados.length > visibleCount
 
   const getInitials = (name) => {
     const parts = name?.split(' ') || ['?']
@@ -57,7 +60,7 @@ export default function Matches({ usuario }) {
     return { background: AVATARS_BG[i], color: AVATARS_COLOR[i] }
   }
 
-  const mismoHorario = (u) => u.horario_entrada === usuario.horario_entrada
+  const NIVEL_LABEL = { alta: 'Alta', media: 'Media', baja: 'Baja' }
 
   return (
     <div className={s.page}>
@@ -65,7 +68,7 @@ export default function Matches({ usuario }) {
         <div className={s.header}>
           <h1 className={s.title}>Compañeros de carpool</h1>
           <p className={s.subtitle}>
-            Estudiantes de <strong>{usuario.distrito}</strong> que buscan compartir el viaje a la Ulima
+            Estudiantes de <strong>{usuario.distrito}</strong> y distritos vecinos, ordenados por compatibilidad contigo
           </p>
         </div>
 
@@ -93,12 +96,12 @@ export default function Matches({ usuario }) {
 
         {/* Count */}
         <div className={s.count}>
-          {loading ? '' : `${filtered.length} estudiante${filtered.length !== 1 ? 's' : ''} de ${usuario.distrito}${filtroHorario ? ` · ${filtroHorario}` : ''}`}
+          {loading ? '' : `${ordenados.length} estudiante${ordenados.length !== 1 ? 's' : ''} en tu zona${filtroHorario ? ` · ${filtroHorario}` : ''} · ordenados por compatibilidad`}
         </div>
 
         {loading ? (
           <div className={s.loading}>Cargando estudiantes...</div>
-        ) : filtered.length === 0 ? (
+        ) : ordenados.length === 0 ? (
           <div className={s.emptyState}>
             <Search size={32} color="var(--border)" style={{ marginBottom: '12px' }} />
             <div className={s.emptyTitle}>Sin resultados</div>
@@ -117,21 +120,26 @@ export default function Matches({ usuario }) {
                       <div className={s.cardName}>{u.nombre_completo}</div>
                       <div className={s.cardCarrera}>{u.carrera}</div>
                       <div className={s.tagRow}>
-                        {u.distrito === usuario.distrito && (
-                          <div className={s.matchBadge}>✦ Mismo distrito</div>
-                        )}
-                        {mismoHorario(u) && (
-                          <div className={s.horarioBadge}>⏰ Mismo horario</div>
-                        )}
+                        {u._compat.razones.map(r => (
+                          <span key={r} className={s.razon}>{r}</span>
+                        ))}
                       </div>
                     </div>
-                    <div className={`${s.badge} ${u.tipo_usuario === 'conductor' ? s.badgeConductor : s.badgePasajero}`}>
-                      {u.tipo_usuario === 'conductor' ? <Car size={10} /> : <User size={10} />}
-                      {u.tipo_usuario}
+                    <div className={s.badgeCol}>
+                      <div className={`${s.badge} ${u.tipo_usuario === 'conductor' ? s.badgeConductor : s.badgePasajero}`}>
+                        {u.tipo_usuario === 'conductor' ? <Car size={10} /> : <User size={10} />}
+                        {u.tipo_usuario}
+                      </div>
+                      <div className={`${s.compat} ${s['compat_' + u._compat.nivel]}`} title={`Compatibilidad ${u._compat.score}%`}>
+                        {NIVEL_LABEL[u._compat.nivel]} · {u._compat.score}%
+                      </div>
                     </div>
                   </div>
 
-                  <div className={s.infoRow}><MapPin size={12} color="var(--accent)" />{u.distrito}</div>
+                  <div className={s.infoRow}>
+                    <MapPin size={12} color="var(--accent)" />
+                    {u.distrito}{u.distrito !== usuario.distrito ? ' (vecino)' : ''}
+                  </div>
                   <div className={s.infoRow}>
                     <Clock size={12} color="var(--medium)" />
                     {u.horario_entrada}{u.horario_salida ? ` – ${u.horario_salida}` : ''}
@@ -166,7 +174,7 @@ export default function Matches({ usuario }) {
 
             {hasMore && (
               <button className={s.verMasBtn} onClick={() => setVisibleCount(c => c + PAGE_SIZE)}>
-                Ver más estudiantes ({filtered.length - visibleCount} restantes)
+                Ver más estudiantes ({ordenados.length - visibleCount} restantes)
               </button>
             )}
           </>

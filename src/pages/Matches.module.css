@@ -227,25 +227,44 @@
   color: var(--medium);
 }
 
-.matchBadge {
+.badgeCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.compat {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: #FEF3C7;
-  color: #92400E;
   padding: 2px 8px;
   border-radius: 10px;
   font-size: 10px;
-  font-weight: 600;
-  margin-top: 4px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.horarioBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.compat_alta {
   background: #E8F5EF;
   color: var(--accent);
+}
+
+.compat_media {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.compat_baja {
+  background: #F1F0EC;
+  color: var(--medium);
+}
+
+.razon {
+  display: inline-flex;
+  align-items: center;
+  background: var(--cream);
+  color: var(--medium);
   padding: 2px 8px;
   border-radius: 10px;
   font-size: 10px;
