@@ -3,12 +3,26 @@
 
 export const DOMINIO_ULIMA = '@aloe.ulima.edu.pe'
 
-/** Correo institucional válido de la Ulima. */
+/** Correo institucional válido de la Ulima (solo verifica el dominio). */
 export const esCorreoUlima = (correo) =>
   typeof correo === 'string' && correo.trim().toLowerCase().endsWith(DOMINIO_ULIMA)
 
-/** Código de alumno: exactamente 8 dígitos. */
-export const esCodigoValido = (codigo) => /^\d{8}$/.test(String(codigo).trim())
+/**
+ * Código de alumno: 8 dígitos, donde los primeros 4 son el año de ingreso
+ * (2020 a 2026) y los otros 4 son numéricos. Ej: 20204353.
+ */
+export const esCodigoValido = (codigo) => /^202[0-6]\d{4}$/.test(String(codigo).trim())
+
+/**
+ * Correo institucional válido para registrarse: dominio @aloe.ulima.edu.pe y
+ * cuyo usuario (antes del @) es un código válido (año 2020-2026 + 4 dígitos).
+ */
+export const esCorreoUlimaValido = (correo) => {
+  const c = String(correo || '').trim().toLowerCase()
+  if (!c.endsWith(DOMINIO_ULIMA)) return false
+  const local = c.slice(0, -DOMINIO_ULIMA.length)
+  return esCodigoValido(local)
+}
 
 /** Solo los dígitos de un texto. */
 export const soloDigitos = (valor) => String(valor || '').replace(/\D/g, '')

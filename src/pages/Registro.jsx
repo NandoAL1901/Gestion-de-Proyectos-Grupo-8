@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Car, User, CheckCircle, AlertCircle, ChevronRight, ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { DISTRITOS, CARRERAS, HORARIOS } from '../lib/constants'
-import { esCorreoUlima, esCodigoValido, esTelefonoValido, normalizarTelefono, esPlacaValida } from '../lib/validation'
+import { esCorreoUlimaValido, esCodigoValido, esTelefonoValido, normalizarTelefono, esPlacaValida } from '../lib/validation'
 import s from './Registro.module.css'
 
 const F = ({ name, label, required, type = 'text', hint, placeholder, form, fieldErrors, set }) => (
@@ -89,10 +89,10 @@ export default function Registro({ onLogin }) {
   const validate = () => {
     const e = {}
     if (!form.nombre_completo.trim()) e.nombre_completo = 'El nombre es obligatorio'
-    if (!esCorreoUlima(form.correo)) e.correo = 'Debes usar tu correo @aloe.ulima.edu.pe'
+    if (!esCorreoUlimaValido(form.correo)) e.correo = 'Tu correo debe ser tu código (año 2020–2026 + 4 dígitos) @aloe.ulima.edu.pe'
     if (!form.password || form.password.length < 6) e.password = 'La contraseña debe tener al menos 6 caracteres'
     if (form.password !== form.confirmPassword) e.confirmPassword = 'Las contraseñas no coinciden'
-    if (!esCodigoValido(form.codigo_ulima)) e.codigo_ulima = 'El código debe tener exactamente 8 dígitos numéricos'
+    if (!esCodigoValido(form.codigo_ulima)) e.codigo_ulima = 'El código debe tener 8 dígitos y empezar con tu año de ingreso (2020–2026)'
     if (!esTelefonoValido(form.telefono)) e.telefono = 'Ingresa un celular peruano válido (9 dígitos, empieza en 9)'
     if (!form.carrera) e.carrera = 'Selecciona tu carrera'
     if (!form.distrito) e.distrito = 'Selecciona tu distrito'
@@ -232,7 +232,7 @@ export default function Registro({ onLogin }) {
         <div className={s.card}>
           <div className={s.sectionTitle}>Datos personales</div>
           <F name="nombre_completo" label="Nombre completo" required placeholder="Ej: Ana García Torres" {...fieldProps} />
-          <F name="correo" label="Correo institucional" required type="email" placeholder="codigo@aloe.ulima.edu.pe" hint="Debe ser tu correo @aloe.ulima.edu.pe" {...fieldProps} />
+          <F name="correo" label="Correo institucional" required type="email" placeholder="20234567@aloe.ulima.edu.pe" hint="Tu código (año 2020–2026 + 4 dígitos) @aloe.ulima.edu.pe" {...fieldProps} />
           <PasswordField
             label="Contraseña"
             value={form.password}
@@ -249,7 +249,7 @@ export default function Registro({ onLogin }) {
             show={showConfirm}
             onToggle={() => setShowConfirm(p => !p)}
           />
-          <F name="codigo_ulima" label="Código de alumno" required placeholder="12345678" hint="8 dígitos numéricos de tu código universitario" type="text" {...fieldProps} />
+          <F name="codigo_ulima" label="Código de alumno" required placeholder="20234567" hint="8 dígitos: año de ingreso (2020–2026) + 4 dígitos" type="text" {...fieldProps} />
           <F name="telefono" label="Número de celular" required placeholder="Ej: 987654321" hint="Tu número para coordinar via WhatsApp" type="tel" {...fieldProps} />
           <Sel name="carrera" label="Carrera" required options={CARRERAS} placeholder="Selecciona tu carrera..." {...fieldProps} />
         </div>

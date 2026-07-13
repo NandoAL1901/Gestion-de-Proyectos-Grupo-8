@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   esCorreoUlima,
+  esCorreoUlimaValido,
   esCodigoValido,
   soloDigitos,
   esTelefonoValido,
@@ -23,11 +24,33 @@ describe('esCorreoUlima', () => {
 })
 
 describe('esCodigoValido', () => {
-  it('exige exactamente 8 dígitos', () => {
+  it('acepta 8 dígitos con año 2020-2026', () => {
     expect(esCodigoValido('20204353')).toBe(true)
-    expect(esCodigoValido('2020435')).toBe(false)  // 7
+    expect(esCodigoValido('20260001')).toBe(true)
+    expect(esCodigoValido('20239999')).toBe(true)
+  })
+  it('rechaza año fuera de 2020-2026', () => {
+    expect(esCodigoValido('20194353')).toBe(false) // 2019
+    expect(esCodigoValido('20274353')).toBe(false) // 2027
+    expect(esCodigoValido('19994353')).toBe(false) // 1999
+  })
+  it('rechaza longitud o caracteres inválidos', () => {
+    expect(esCodigoValido('2020435')).toBe(false)   // 7
     expect(esCodigoValido('202043530')).toBe(false) // 9
     expect(esCodigoValido('2020435a')).toBe(false)  // letra
+  })
+})
+
+describe('esCorreoUlimaValido', () => {
+  it('acepta correo cuyo usuario es un código válido', () => {
+    expect(esCorreoUlimaValido('20204353@aloe.ulima.edu.pe')).toBe(true)
+    expect(esCorreoUlimaValido('  20260001@ALOE.ULIMA.EDU.PE ')).toBe(true)
+  })
+  it('rechaza dominio o código inválidos', () => {
+    expect(esCorreoUlimaValido('20204353@gmail.com')).toBe(false)
+    expect(esCorreoUlimaValido('20194353@aloe.ulima.edu.pe')).toBe(false) // año 2019
+    expect(esCorreoUlimaValido('juan@aloe.ulima.edu.pe')).toBe(false)     // no numérico
+    expect(esCorreoUlimaValido('')).toBe(false)
   })
 })
 
