@@ -134,6 +134,18 @@
   margin-bottom: 20px;
 }
 
+@media (max-width: 640px) {
+  .sectionRow {
+    grid-template-columns: 1fr;
+  }
+  .greetingName {
+    font-size: 24px;
+  }
+  .page {
+    padding: 24px 14px 48px;
+  }
+}
+
 .sideCol {
   display: flex;
   flex-direction: column;

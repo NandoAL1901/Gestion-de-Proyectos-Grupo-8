@@ -111,3 +111,33 @@
   border-color: var(--error);
   color: var(--error);
 }
+
+/* En móvil: navbar compacto (solo íconos) para que todo quepa */
+@media (max-width: 640px) {
+  .inner {
+    padding: 0 12px;
+    gap: 2px;
+  }
+  .logo {
+    margin-right: 6px;
+    gap: 6px;
+  }
+  .logoText {
+    font-size: 15px;
+  }
+  .link {
+    padding: 8px 9px;
+  }
+  .linkLabel {
+    display: none;
+  }
+  .userInfo {
+    display: none;
+  }
+  .logout {
+    padding: 8px 10px;
+  }
+  .logoutLabel {
+    display: none;
+  }
+}

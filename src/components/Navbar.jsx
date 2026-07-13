@@ -29,9 +29,10 @@ export default function Navbar({ usuario, onLogout }) {
           <button
             key={l.path}
             onClick={() => navigate(l.path)}
+            title={l.label}
             className={pathname === l.path ? `${s.link} ${s.linkActive}` : s.link}
           >
-            {l.icon} {l.label}
+            {l.icon} <span className={s.linkLabel}>{l.label}</span>
           </button>
         ))}
 
@@ -44,7 +45,7 @@ export default function Navbar({ usuario, onLogout }) {
             <div className={s.userType}>{usuario.tipo_usuario}</div>
           </div>
           <button onClick={onLogout} title="Cerrar sesión" className={s.logout}>
-            <LogOut size={13} /> Salir
+            <LogOut size={13} /> <span className={s.logoutLabel}>Salir</span>
           </button>
         </div>
       </div>
